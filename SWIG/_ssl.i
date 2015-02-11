@@ -54,6 +54,10 @@ extern SSL_METHOD *SSLv3_method(void);
 extern SSL_METHOD *SSLv23_method(void);
 %rename(tlsv1_method) TLSv1_method;
 extern SSL_METHOD *TLSv1_method(void);
+%rename(tlsv1_1_method) TLSv1_1_method;
+extern SSL_METHOD *TLSv1_1_method(void);
+%rename(tlsv1_2_method) TLSv1_2_method;
+extern SSL_METHOD *TLSv1_2_method(void);
 
 %rename(ssl_ctx_new) SSL_CTX_new;
 extern SSL_CTX *SSL_CTX_new(SSL_METHOD *);

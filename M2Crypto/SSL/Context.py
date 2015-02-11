@@ -37,6 +37,21 @@ class Context:
     m2_ssl_ctx_free = m2.ssl_ctx_free
 
     def __init__(self, protocol='sslv23', weak_crypto=None):
+        """Construct a new Context object.
+
+        @param protocol:    SSL/TLS version to use. Defaults to "sslv23" which
+                            will allow any of TLSv1, TLSv1.1 and TLSv1.2 by
+                            default. Valid values are:
+                            "sslv2", "sslv23", "sslv3",
+                            "tlsv1", "tlsv1_1", "tlsv1_2".
+        @type protocol:     string
+        @param weak_crypto: By default, SSLv2, SSLv3 and a list of "weak"
+                            ciphers are disabled when using protocol="sslv23".
+                            If this parameter is non-None, protocol="sslv23"
+                            will also allow SSLv2 are SSLv3, and all of
+                            OpenSSL's ciphers are enabled regardless of
+                            protocol.
+        """
         proto = getattr(m2, protocol + '_method', None)
         if proto is None:
             raise ValueError, "no such protocol '%s'" % protocol
@@ -46,7 +61,9 @@ class Context:
         m2.ssl_ctx_set_cache_size(self.ctx, 128L)
         if weak_crypto is None:
             if protocol == 'sslv23':
-                self.set_options(m2.SSL_OP_ALL | m2.SSL_OP_NO_SSLv2)
+                self.set_options(m2.SSL_OP_ALL
+                        | m2.SSL_OP_NO_SSLv2
+                        | m2.SSL_OP_NO_SSLv3)
             self.set_cipher_list('ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH')
         
     def __del__(self):
